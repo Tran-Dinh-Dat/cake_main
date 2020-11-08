@@ -7,33 +7,35 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Đăng nhập</h3></div>
                                     <div class="card-body">
-                                        <form>
+                                        <form @submit.prevent="login">
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
-                                                <input class="form-control py-4" id="inputEmailAddress" type="email" placeholder="Enter email address" />
+                                                <input v-model="user.email" class="form-control py-4" id="inputEmailAddress" type="email" placeholder="Email" />
+                                                <div class="invalid-feedback" v-if="errors.email">{{errors.email[0]}}</div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="small mb-1" for="inputPassword">Password</label>
-                                                <input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" />
+                                                <label class="small mb-1" for="inputPassword">Mật khẩu</label>
+                                                <input v-model="user.password" class="form-control py-4" id="inputPassword" type="password" placeholder="Mật khẩu" />
+                                                <div class="invalid-feedback" v-if="errors.password">{{errors.password[0]}}</div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" />
-                                                    <label class="custom-control-label" for="rememberPasswordCheck">Remember password</label>
+                                                    <input v-model="user.remember_me" class="custom-control-input" id="rememberPasswordCheck" type="checkbox" />
+                                                    <label class="custom-control-label" for="rememberPasswordCheck">Lưu mật khẩu</label>
                                                 </div>
                                             </div>
                                             <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <router-link :to="{name: 'reset-password'}" class="small">Forgot Password?</router-link>
-                                                <a class="btn btn-primary" href="index.html">Login</a>
+                                                <router-link :to="{name: 'reset-password'}" class="small">Quên mật khẩu?</router-link>
+                                                <button type="submit" class="btn btn-primary">Đăng nhập</button>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="card-footer text-center">
 
                                         <div class="small">
-                                            <router-link :to="{name: 'register'}">Need an account? Sign up!</router-link>
+                                            <router-link :to="{name: 'register'}">Chưa có tài khoản? Đăng ký ngay!</router-link>
                                         </div>
                                     </div>
                                 </div>
@@ -61,7 +63,59 @@
 </template>
 
 <script>
-export default {};
+    import * as authService from './../../../services/auth_service.js';
+    export default {
+        data() {
+            return {
+                user: {
+                    'email': '',
+                    'password': '',
+                    'remember_me': false
+                },
+                errors: {}
+            }
+        },
+        methods: {
+            login: async function() {
+                try {
+                    const response = await authService.login(this.user);
+                    this.errors = {};
+                    this.$router.push('/admin');
+                    this.flashMessage.success({
+                        message: response.data.message,
+                        time: 2000
+                    })
+                } catch (error) {
+                    switch (error.response.status) {
+                        case 422:
+                            this.errors = error.response.data.errors;
+                            break;
+
+                        case 401:
+                            this.flashMessage.error({
+                                message: error.response.data.message,
+                                time: 2000
+                            });
+                            break;
+
+                        case 500:
+                            this.flashMessage.error({
+                                message: error.response.data.message,
+                                time: 2000
+                            });
+                            break;
+                    
+                        default:
+                            this.flashMessage.error({
+                                message: 'Có lỗi xảy ra, vui lòng thử lại sau!',
+                                time: 2000
+                            });
+                            break;
+                    }
+                }
+            }
+        },
+    }
 </script>
 
 <style>

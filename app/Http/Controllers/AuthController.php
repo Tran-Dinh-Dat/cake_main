@@ -45,7 +45,7 @@ class AuthController extends Controller
 
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return response()->json([
-                'message' => 'Unauthorized',
+                'message' => 'Email hoặc mật khẩu không chính xác!',
                 'status_code' => 401
             ], 401);
         }
@@ -66,6 +66,7 @@ class AuthController extends Controller
         if ($token->save()) {
             return response()->json([
                 'user' => $user,
+                'message' => 'Đăng nhập thành công!',
                 'access_token' => $tokenData->accessToken,
                 'token_type' => 'Bearer',
                 'token_scope' => $tokenData->token->scopes[0],

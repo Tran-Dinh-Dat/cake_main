@@ -6,6 +6,7 @@ import Category from './components/templates/admin/Category.vue';
 import Register from './components/templates/auth/Register.vue';
 import Login from './components/templates/auth/Login.vue';
 import ResetPassword from './components/templates/auth/ResetPassword.vue';
+import * as authService from './services/auth_service.js';
 
 Vue.use(Router);
 
@@ -25,7 +26,14 @@ const routes = [
                 name: 'admin.categories',
                 component: Category
             }
-        ]
+        ],
+        beforeEnter(to, from, next) {
+            if (!authService.isLoggedIn()) {
+                next('/login');
+            } else {
+                next();
+            }
+        }
     },
     
     {
