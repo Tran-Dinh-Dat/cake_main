@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Router from 'vue-router';
+import VueRouter from 'vue-router';
 import Home from './components/templates/admin/Home.vue';
 import Dashboard from './components/templates/admin/Dashboard.vue';
 import Category from './components/templates/admin/Category.vue';
@@ -8,7 +8,7 @@ import Login from './components/templates/auth/Login.vue';
 import ResetPassword from './components/templates/auth/ResetPassword.vue';
 import * as authService from './services/auth_service.js';
 
-Vue.use(Router);
+Vue.use(VueRouter);
 
 const routes = [
     {
@@ -44,7 +44,14 @@ const routes = [
     {
         path: '/login',
         name: 'login',
-        component: Login
+        component: Login,
+        beforeEnter(to, from, next) {
+            if (!authService.isLoggedIn()) {
+                next();
+            } else {
+                next('/admin');
+            }
+        }
     },
     {
         path: '/reset-password',
@@ -53,8 +60,10 @@ const routes = [
     }
 ];
 
-const router = new Router({
+const router = new VueRouter({
     routes: routes,
+    // mode: 'history',
+    linkActiveClass: 'active'
 });
 
 export default router;
