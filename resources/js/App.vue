@@ -6,16 +6,20 @@
 </template>
 
 <script>
-import Nav from './components/common/admin/Nav.vue';
-import Sidebar from './components/common/admin/Sidebar.vue';
-import Footer from './components/common/admin/Footer.vue';
-export default {
-    components: {
-        Nav,
-        Sidebar,
-        Footer,
-    },
-}
+    import * as authService from "./services/auth_service.js";
+    export default {
+        beforeCreate: async function() {
+            try {
+                if (authService.isLoggedIn()) {
+                    const response = await authService.getProfile();
+                    console.log(response);
+                    this.$store.dispatch('authenticate', response.data);
+                }
+            } catch (error) {
+                authService.logout();
+            }
+        },
+    }
 </script>
 
 <style>

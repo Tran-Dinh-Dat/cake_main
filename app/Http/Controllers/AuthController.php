@@ -52,9 +52,9 @@ class AuthController extends Controller
         $user = $request->user();
 
         if ($user->role == 'administrator') {
-            $tokenData = $user->createToken('Personal Access Tokens', ['do_anything']);
+            $tokenData = $user->createToken('Personal Access Tokens', ['administrator']);
         } else {
-            $tokenData = $user->createToken('Personal Access Tokens', ['can_create']);
+            $tokenData = $user->createToken('Personal Access Tokens', ['user']);
         }
 
         $token = $tokenData->token;
@@ -88,5 +88,17 @@ class AuthController extends Controller
             'message' => 'Tài khoản đã được đăng xuất!',
             'status_code' => 200
         ], 200);
+    }
+
+    public function profile(Request $request)
+    {
+        if ($request->user()) {
+            return response()->json($request->user(), 200);
+        } 
+
+        return response()->json([
+            'message' => 'Bạn chưa đăng nhập!',
+            'status_code' => 5010
+        ], 500);
     }
 }
