@@ -1,4 +1,3 @@
-import { expr } from 'jquery';
 import {http, httpFile} from './http_service.js';
 
 export function createCategory(data) {

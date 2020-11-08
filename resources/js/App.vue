@@ -1,13 +1,6 @@
 <template>
     <div class="sb-nav-fixed">
-        <Nav />
-        <div id="layoutSidenav">
-            <Sidebar />
-            <div id="layoutSidenav_content">
-                <router-view></router-view>
-                <Footer />
-            </div>
-        </div>
+        <router-view></router-view>
         <FlashMessage position="right top"/>
     </div>
 </template>

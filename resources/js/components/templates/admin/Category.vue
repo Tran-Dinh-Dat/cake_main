@@ -1,91 +1,101 @@
 <template>
- <div class="card mb-4">
-    <div class="card-header d-flex">
-        <i class="fas fa-table mr-1"></i>
-        Categories
-        <button @click="showNewCategoryModal" class="btn btn-primary ml-auto btn-sm" >Tạo danh mục mới</button>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Tên danh mục</th>
-                        <th>Hình ảnh</th>
-                        <th>Chức năng</th>
-                    </tr>
-                </thead>
-               
-                <tbody>
-                   
-                   <tr v-for="(category, index) in categories" :key="index">
-                        <td>{{ index +1}}</td>
-                        <td>{{ category.name }}</td>
-                        <td><img width="100px" :src="`${$store.state.serverPath}/storage/${category.image}`" :alt="category.name"></td>
-                        <td>
-                            <button class="btn btn-primary btn-sm" @click="editCategory(category)">Edit</button>
-                            <button class="btn btn-warning btn-sm" @click="deleteCategory(category)">Delete</button>
-                        </td>
-                    </tr>
-          
-                </tbody>
-            </table>
-            <div class="text-center" v-show="moreExists">
-                <button @click="loadMore" type="button" class="btn btn-primary btn-sm">
-                    Xem thêm <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                </button>
-            </div>
-        </div>
-    </div>
+<main>
+    <div class="container-fluid">
+        <h1 class="mt-4">Danh mục sản phẩm</h1>
+        <ol class="breadcrumb mb-4">
+            <router-link :to="{name: 'admin.dashboard'}" class="breadcrumb-item">Dashboard </router-link>
+            <router-link :to="{name: 'admin.categories'}" class="breadcrumb-item active">Danh mục sản phẩm</router-link>
+        </ol>
 
-    <b-modal ref="newCategoryModal" hide-footer title="Thêm danh mục sản phẩm">
-      <div class="d-block text-center">
-          <form @submit.prevent="createCategory">
-              <div class="form-group text-left">
-                <label for="name">Tên danh mục</label>
-                <input type="text" v-model="categoryData.name" id="name" class="form-control" placeholder="Nhập tên danh mục...">
-                <div class="invalid-feedback" v-if="errors.name">{{ errors.name[0]}}</div>
-              </div>
-            <div class="form-group text-left">
-                <label for="image">Chọn ảnh danh mục</label>
-                <div v-if="categoryData.image.name" class="pb-2">
-                    <img src="" ref="newCategoryImagesDisplay" alt="" class="w-150px">
+        <div class="card mb-4">
+            <div class="card-header d-flex">
+                <i class="fas fa-table mr-1"></i>
+                Tât cả danh mục sản phẩm
+                <button @click="showNewCategoryModal" class="btn btn-primary ml-auto btn-sm" >Tạo danh mục mới</button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tên danh mục</th>
+                                <th>Hình ảnh</th>
+                                <th>Chức năng</th>
+                            </tr>
+                        </thead>
+                    
+                        <tbody>
+                        
+                        <tr v-for="(category, index) in categories" :key="index">
+                                <td>{{ index +1}}</td>
+                                <td>{{ category.name }}</td>
+                                <td><img width="100px" :src="`${$store.state.serverPath}/storage/${category.image}`" :alt="category.name"></td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" @click="editCategory(category)">Edit</button>
+                                    <button class="btn btn-warning btn-sm" @click="deleteCategory(category)">Delete</button>
+                                </td>
+                            </tr>
+                
+                        </tbody>
+                    </table>
+                    <div class="text-center" v-show="moreExists">
+                        <button @click="loadMore" type="button" class="btn btn-primary btn-sm">
+                            Xem thêm <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                        </button>
+                    </div>
                 </div>
-                <input type="file" v-on:change="attachImage" ref="newCategoryImage" id="image" class="form-control ">
-                 <div class="invalid-feedback" v-if="errors.image">{{ errors.image[0]}}</div>
             </div>
 
-            <button class="btn btn-warning" @click="hideNewCategoryModal">Đóng</button>
-            <button type="submit" class="btn btn-primary">Lưu</button>
-          </form>
-        </div>
-    </b-modal>
+            <b-modal ref="newCategoryModal" hide-footer title="Thêm danh mục sản phẩm">
+            <div class="d-block text-center">
+                <form @submit.prevent="createCategory">
+                    <div class="form-group text-left">
+                        <label for="name">Tên danh mục</label>
+                        <input type="text" v-model="categoryData.name" id="name" class="form-control" placeholder="Nhập tên danh mục...">
+                        <div class="invalid-feedback" v-if="errors.name">{{ errors.name[0]}}</div>
+                    </div>
+                    <div class="form-group text-left">
+                        <label for="image">Chọn ảnh danh mục</label>
+                        <div v-if="categoryData.image.name" class="pb-2">
+                            <img src="" ref="newCategoryImagesDisplay" alt="" class="w-150px">
+                        </div>
+                        <input type="file" v-on:change="attachImage" ref="newCategoryImage" id="image" class="form-control ">
+                        <div class="invalid-feedback" v-if="errors.image">{{ errors.image[0]}}</div>
+                    </div>
 
-    <b-modal ref="editCategoryModal" hide-footer title="Cập nhật danh mục sản phẩm">
-      <div class="d-block text-center">
-          <form @submit.prevent="updateCategory">
-              <div class="form-group text-left">
-                <label>Tên danh mục</label>
-                <input type="text" v-model="editCategoryData.name"  class="form-control" placeholder="Nhập tên danh mục...">
-                <div class="invalid-feedback" v-if="errors.name">{{ errors.name[0]}}</div>
-              </div>
-            <div class="form-group text-left">
-                <label>Chọn ảnh danh mục</label>
-                <div class="pb-2">
-                    <img :src="`${$store.state.serverPath}/storage/${editCategoryData.image}`" ref="editCategoryImagesDisplay" alt="" class="w-150px">
+                    <button class="btn btn-warning" @click="hideNewCategoryModal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </form>
                 </div>
-                <input type="file" v-on:change="editAttachImage" ref="editCategoryImage" class="form-control ">
-                 <div class="invalid-feedback" v-if="errors.image">{{ errors.image[0]}}</div>
-            </div>
+            </b-modal>
 
-            <button class="btn btn-warning" @click="hideEditCategoryModal">Đóng</button>
-            <button type="submit" class="btn btn-primary">Cập nhật</button>
-          </form>
+            <b-modal ref="editCategoryModal" hide-footer title="Cập nhật danh mục sản phẩm">
+            <div class="d-block text-center">
+                <form @submit.prevent="updateCategory">
+                    <div class="form-group text-left">
+                        <label>Tên danh mục</label>
+                        <input type="text" v-model="editCategoryData.name"  class="form-control" placeholder="Nhập tên danh mục...">
+                        <div class="invalid-feedback" v-if="errors.name">{{ errors.name[0]}}</div>
+                    </div>
+                    <div class="form-group text-left">
+                        <label>Chọn ảnh danh mục</label>
+                        <div class="pb-2">
+                            <img :src="`${$store.state.serverPath}/storage/${editCategoryData.image}`" ref="editCategoryImagesDisplay" alt="" class="w-150px">
+                        </div>
+                        <input type="file" v-on:change="editAttachImage" ref="editCategoryImage" class="form-control ">
+                        <div class="invalid-feedback" v-if="errors.image">{{ errors.image[0]}}</div>
+                    </div>
+
+                    <button class="btn btn-warning" @click="hideEditCategoryModal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </form>
+                </div>
+            </b-modal>
+
         </div>
-    </b-modal>
-
-</div>
+    </div>
+</main>
 </template>
 
 <script>

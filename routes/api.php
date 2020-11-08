@@ -22,6 +22,22 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+
+
 Route::group(['namespace' => 'Api'], function () {
     Route::resource('categories', 'CategoryController');
+    Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
+        Route::post('edit-category', function () {
+            return response()->json([
+                'message' => 'Admin access',
+                'status_code' => 200
+            ], 200);
+        })->middleware('scope:do_anything');
+        Route::post('create-category', function () {
+            return response()->json([
+                'message' => 'Everyone access',
+                'status_code' => 200
+            ], 200);
+        })->middleware('scope:do_anything,can_create');
+    });
 });
