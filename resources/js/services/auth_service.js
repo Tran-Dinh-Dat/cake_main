@@ -43,6 +43,16 @@ export function getAccessToken() {
     return tokenData.user.access_token;
 }
 
+export function getUserRole() {
+    const token = localStorage.getItem('laravel-vue-spa-token');
+    if (!token) {
+        return null;
+    }
+
+    const tokenData = jwt.decode(token);
+    return tokenData.user.user.role;
+}
+
 export function getProfile() {
     return http().get('/api/auth/profile');
 }

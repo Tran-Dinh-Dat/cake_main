@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from './components/templates/admin/Home.vue';
 import Dashboard from './components/templates/admin/Dashboard.vue';
 import Category from './components/templates/admin/Category.vue';
+import Product from './components/templates/admin/Product.vue';
 import Register from './components/templates/auth/Register.vue';
 import Login from './components/templates/auth/Login.vue';
 import ResetPassword from './components/templates/auth/ResetPassword.vue';
@@ -24,7 +25,26 @@ const routes = [
             {
                 path: '/admin/categories',
                 name: 'admin.categories',
-                component: Category
+                component: Category,
+                beforeEnter(to, from, next) {
+                    if (authService.getUserRole() == 'administrator') {
+                        next();
+                    } else {
+                        next('/404');
+                    }
+                }
+            },
+            {
+                path: '/admin/products',
+                name: 'admin.products',
+                component: Product,
+                beforeEnter(to, from, next) {
+                    if (authService.getUserRole() == 'user') {
+                        next();
+                    } else {
+                        next('/404');
+                    }
+                }
             }
         ],
         beforeEnter(to, from, next) {
@@ -57,6 +77,11 @@ const routes = [
         path: '/reset-password',
         name: 'reset-password',
         component: ResetPassword
+    },
+    {
+        path: '*',
+        name: '404',
+        component: () => import('./components/templates/404.vue')
     }
 ];
 
