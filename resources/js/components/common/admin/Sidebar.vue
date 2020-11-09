@@ -9,15 +9,14 @@
                         Dashboard
                     </router-link>
                 
-                    <div class="sb-sidenav-menu-heading">Categories</div>
-                     <router-link class="nav-link" :to="{name: 'admin.categories'}">
+                    <router-link v-if="$store.state.profile.role === 'administrator'" class="nav-link" :to="{name: 'admin.categories'}">
                         <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                        Categories
+                        Danh mục
                     </router-link>
-                    <a class="nav-link" href="tables.html">
-                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                        Products
-                    </a>
+                   <router-link v-if="$store.state.profile.role === 'user'" class="nav-link" :to="{name: 'admin.products'}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        Sản phẩm
+                    </router-link>
                 </div>
             </div>
             <div class="sb-sidenav-footer">

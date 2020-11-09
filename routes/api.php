@@ -26,23 +26,13 @@ Route::group(['prefix' => 'auth'], function () {
 
 
 Route::group(['namespace' => 'Api'], function () {
-    Route::resource('categories', 'CategoryController');
-    Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
-        Route::group(['middleware' => 'scopes:user'], function () {
-            Route::get('user-scope', function () {
-                return response()->json([
-                    'message' => 'Người dùng có thể truy cập!',
-                    'status_code' => 200
-                ], 200);
-            });
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::group(['middleware' => 'scope:user'], function () {
+            Route::get('get-categories', 'ProductController@categories');
+            Route::resource('products', 'ProductController');
         });
         Route::group(['middleware' => 'scope:administrator'], function () {
-            Route::get('admin-scope', function () {
-                return response()->json([
-                    'message' => 'Admin có thể truy cập!',
-                    'status_code' => 200
-                ], 200);
-            });
+            Route::resource('categories', 'CategoryController');
         });
     });
 });

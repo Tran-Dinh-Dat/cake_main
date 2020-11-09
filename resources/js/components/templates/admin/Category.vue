@@ -4,14 +4,14 @@
         <h1 class="mt-4">Danh mục sản phẩm</h1>
         <ol class="breadcrumb mb-4">
             <router-link :to="{name: 'admin.dashboard'}" class="breadcrumb-item">Dashboard </router-link>
-            <router-link :to="{name: 'admin.categories'}" class="breadcrumb-item active">Danh mục sản phẩm</router-link>
+            <a class="breadcrumb-item active">Danh mục sản phẩm</a>
         </ol>
 
         <div class="card mb-4">
             <div class="card-header d-flex">
                 <i class="fas fa-table mr-1"></i>
                 Tât cả danh mục sản phẩm
-                <button @click="showNewCategoryModal" class="btn btn-primary ml-auto btn-sm" >Tạo danh mục mới</button>
+                <button @click="showNewCategoryModal" class="btn btn-primary ml-auto btn-sm" >Thêm danh mục mới</button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -208,7 +208,6 @@ export default {
                         });
                         break;
                 }
-                console.log(error.response.status);
             }
         },
 
@@ -278,7 +277,7 @@ export default {
                     time: 2000
                 });
             } catch (error) {
-                console.log(error);
+                this.errors = error.response.data.errors;
                 this.flashMessage.error({
                     message: response.data.message,
                     time: 2000
