@@ -56,3 +56,11 @@ export function getUserRole() {
 export function getProfile() {
     return http().get('/api/auth/profile');
 }
+
+export function resetPasswordRequest(user) {
+    return http().post('/api/auth/reset-password-request', user);
+}
+
+export function resetPassword(user) {
+    return http().post('/api/auth/reset-password', user);
+}
