@@ -6,6 +6,7 @@ import Category from './components/templates/admin/Category.vue';
 import Product from './components/templates/admin/Product.vue';
 import Register from './components/templates/auth/Register.vue';
 import Login from './components/templates/auth/Login.vue';
+import ResetPasswordRequest from './components/templates/auth/ResetPasswordRequest.vue';
 import ResetPassword from './components/templates/auth/ResetPassword.vue';
 import * as authService from './services/auth_service.js';
 
@@ -74,9 +75,28 @@ const routes = [
         }
     },
     {
-        path: '/reset-password',
+        path: '/reset-password-request',
+        name: 'reset-password-request',
+        component: ResetPasswordRequest,
+        beforeEnter(to, from, next) {
+            if (!authService.isLoggedIn()) {
+                next();
+            } else {
+                next('/admin');
+            }
+        }
+    },
+    {
+        path: '/reset-password/:email',
         name: 'reset-password',
-        component: ResetPassword
+        component: ResetPassword,
+        beforeEnter(to, from, next) {
+            if (!authService.isLoggedIn()) {
+                next();
+            } else {
+                next('/admin');
+            }
+        }
     },
     {
         path: '*',

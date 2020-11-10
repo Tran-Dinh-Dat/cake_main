@@ -27,7 +27,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <router-link :to="{name: 'reset-password'}" class="small">Quên mật khẩu?</router-link>
+                                                <router-link :to="{name: 'reset-password-request'}" class="small">Quên mật khẩu?</router-link>
                                                 <button type="submit" class="btn btn-primary">Đăng nhập</button>
                                             </div>
                                         </form>
