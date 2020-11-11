@@ -188,12 +188,11 @@ export default {
                     name: '',
                     image: ''
                 }
-                
+                this.errors = {};
                 this.flashMessage.success({
                     message: 'Tạo danh mục sản phẩm thành công!',
                     time: 2000
                 });
-                console.log(response);
             } catch (error) {
                 switch (error.response.status) {
                     case 422:
@@ -265,12 +264,14 @@ export default {
                 
                 const response = await categoryService.updateCategory(this.editCategoryData.id, formData);
                 this.categories.map(category => {
-                    if (category.id == response.data.id) {
-                        for (let key in response.data) {
-                            category[key] = response.data[key];
+                    if (category.id == response.data.category.id) {
+                        for (let key in response.data.category) {
+                            category[key] = response.data.category[key];
                         }
                     }
                 });
+                this.errors = {};
+
                 this.hideEditCategoryModal();
                 this.flashMessage.success({
                     message: response.data.message,

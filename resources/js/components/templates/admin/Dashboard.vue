@@ -5,14 +5,7 @@
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Dashboard</li>
         </ol>
-        <div class="row">
-            <div class="col-md-6">
-                <button @click="userScope" type="button" class="btn btn-primary btn-sm btn-block">User scope</button>
-            </div>
-            <div class="col-md-6">
-                <button @click="adminScope" type="button" class="btn btn-warning btn-sm btn-block">Admin scope</button>
-            </div>
-        </div>
+      
         <div class="clear-fix mb-2"></div>
         <div class="row">
             <div class="col-xl-3 col-md-6">
@@ -141,18 +134,18 @@
             userScope: async function() {
                 try {
                     const response = await userService.userScope();
-                    console.log(response);
+                    // console.log(response);
                 } catch (error) {
-                    console.log(' '+ error, error.response.status );
+                    // console.log(' '+ error, error.response.status );
                 }
             },
 
             adminScope: async function() {
                 try {
                     const response = await userService.adminScope();
-                    console.log(response);
+                    // console.log(response);
                 } catch (error) {
-                    console.log(' '+ error, error.response.status );
+                    // console.log(' '+ error, error.response.status );
                 }
             }
         },

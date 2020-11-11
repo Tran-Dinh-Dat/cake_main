@@ -188,11 +188,13 @@
                     <div class="form-group">
                       <label for="">Mô tả ngắn</label>
                       <textarea v-model="editProductData.description" class="form-control" rows="3"></textarea>
+                      <div class="invalid-feedback" v-if="errors.description">{{ errors.description[0]}}</div>
                     </div>
 
                     <div class="form-group">
                       <label for="">Nội dung của sản phẩm</label>
                       <textarea v-model="editProductData.content" class="form-control" rows="5"></textarea>
+                      <div class="invalid-feedback" v-if="errors.content">{{ errors.content[0]}}</div>
                     </div>
                     
                     <div class="form-group text-left">
@@ -350,7 +352,7 @@ export default {
                     quantity: 0,
                     views: 0,
                 }
-                
+                this.errors = {};
                 this.flashMessage.success({
                     message: 'Tạo danh mục sản phẩm thành công!',
                     time: 2000
@@ -435,12 +437,13 @@ export default {
                 
                 const response = await productService.updateProduct(this.editProductData.id, formData);
                 this.products.map(product => {
-                    if (product.id == response.data.id) {
-                        for (let key in response.data) {
-                            product[key] = response.data[key];
+                    if (product.id == response.data.product.id) {
+                        for (let key in response.data.product) {
+                            product[key] = response.data.product[key];
                         }
                     }
                 });
+                this.errors = {};
                 this.hideEditProductModal();
                 this.flashMessage.success({
                     message: response.data.message,
