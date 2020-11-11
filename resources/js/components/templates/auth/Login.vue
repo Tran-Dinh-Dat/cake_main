@@ -82,9 +82,9 @@
                     this.errors = {};
                     this.$router.push('/admin');
                     this.flashMessage.success({
-                        message: response.data.message,
+                        message: response.message,
                         time: 2000
-                    })
+                    });
                 } catch (error) {
                     switch (error.response.status) {
                         case 422:
